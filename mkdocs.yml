@@ -1,0 +1,65 @@
+site_name: Seguidor de Linha
+
+repo_url: https://github.com/team-titans-unb/p_seguidor
+repo_name: repo-seguidor
+site_description: "Documentação do seguidor de linha"
+
+nav:
+  - Home: index.md
+
+  - Pão de Queijo:
+    - Mecânica: pages/paoDeQueijo/mec.md
+    - Eletrônica: pages/paoDeQueijo/eletr.md
+    - Controle: pages/paoDeQueijo/contro.md
+
+  - Sucrilho:
+    - Mecânica: pages/sucrilho/mec.md
+    - Eletrônica: pages/sucrilho/eletr.md
+    - Controle: pages/sucrilho/contro.md
+
+  - Azzip:
+    - Mecânica: pages/azzip/mec.md
+    - Eletrônica: pages/azzip/eletr.md
+    - Controle: pages/azzip/contro.md
+    - Software: pages/azzip/soft.md
+
+theme:
+  name: material
+  language: pt-BR
+
+  features:
+    - content.code.annotate
+    - content.tabs.link
+    - header.autohide
+    - navigation.instant
+    - navigation.top
+    - navigation.tracking
+  
+  palette:
+
+    - scheme: default
+      primary: '--md-primary-fg-color'
+      accent: '--md-primary-fg-color'
+      toggle:
+        icon: material/lightbulb-outline
+        name: Mude para o tema escuro
+        
+    - scheme: slate
+      primary: '--md-primary-fg-color'
+      accent: '--md-primary-fg-color'
+      toggle:
+        icon: material/lightbulb
+        name: Mude para o tema claro
+
+  
+  logo: assets/titansIco.ico
+  favicon: assets/titans.png
+  highlightjs: true
+
+extra_css:
+  - overrides/styles.css
+
+markdown_extensions:
+    - admonition
+    - pymdownx.details
+    - pymdownx.superfences
