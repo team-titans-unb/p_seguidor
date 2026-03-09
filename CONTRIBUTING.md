@@ -1,21 +1,110 @@
-# Seguidor de Linha
+# Guia de Contribuição para Documentação de Requisitos
 
-<div align="center">
-  <img src="docs/assets/titans.png" alt="Capa" width="50%">
-</div>
+Este repositório segue um padrão colaborativo para organização da documentação. Siga as orientações abaixo para mantermos um fluxo de trabalho claro e eficiente.
 
----
+## Branches
 
-## Sobre
+Use nomes curtos, descritivos e separados por hífens:
 
-Repositório destinado a documentação dos robôs seguidores de linha: Pão de queijo, Sucrilho e Azzip.
+| Tipo          | Padrão de nome              | Exemplo                      |
+|---------------|-----------------------------|------------------------------|
+| Funcionalidade| feature/nome-curto          | feature/caso-de-uso-login    |
+| Correção      | fix/descricao               | fix/erro-ortografia          |
+| Documento     | doc/tipo-de-arquivo         | doc/especificacao-supp       |
+| Refatoração   | refactor/parte              | refactor/casos-de-uso        |
 
-Nossos três robôs visam o desenvolvimento dos robôs com cada um com seu upgrade específico, o pão de queijo um seguidor de linha simples, sucrilho com sistema de sucção e o azzip que segue por meio do mapeamento otimizado.
+## Commits
 
----
+Formato: `<tipo>: <descrição breve>`
 
-## Histórico de Versões
+### Tipos comuns:
 
-| Versão | Descrição | Autor(es) | Data de Produção | Revisor(es) |
-| :----: | --------- | --------- | :--------------: | :--------------: | 
-| `1.0` | Modelagem inicial do readme | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 02/03/2026 | ✓ | 
+- `feat`: nova funcionalidade ou artefato
+- `fix`: correção de erro
+- `doc`: atualização de documentação
+- `refactor`: reorganização sem alterar conteúdo
+- `style`: ajustes de formatação ou layout
+- `chore`: tarefas gerais
+
+### Exemplos:
+
+- `doc: adicionar glossário inicial`
+- `feat: adicionar caso de uso para login`
+- `fix: corrigir diagrama de atividades do cadastro`
+- `refactor: reorganizar seções do documento de requisitos`
+
+## Issues
+
+Use títulos claros e rótulos como: `documentação`, `revisão`, `bug`, `caso-de-uso`, `história de usuário`, `dúvida`.
+
+### Exemplo:
+
+**Título:** `[documentação] Adicionar caso de uso "Recuperar Senha"`
+
+**Descrição:**
+
+```markdown
+## Tarefa
+Adicionar o caso de uso "Recuperar Senha" no documento de requisitos funcionais.
+
+## Checklist
+- [ ] Criar branch feature/caso-de-uso-recuperar-senha
+- [ ] Criar diagrama de caso de uso
+- [ ] Especificar fluxo principal e alternativo
+```
+
+## Pull Requests (PRs)
+
+**Título:** `[documentação] Adicionar caso de uso "Recuperar Senha"`
+
+**Corpo do PR:**
+```markdown
+## O que foi feito
+- Adicionado caso de uso "Recuperar Senha"
+- Atualizado o diagrama de casos de uso
+
+## Issue relacionada
+Closes #12
+
+## Checklist
+- [x] Texto revisado
+- [x] Diagrama adicionado
+```
+
+## Template de PR
+
+Crie o arquivo `.github/pull_request_template.md` com o conteúdo abaixo:
+
+```markdown
+## Descrição
+Descreva as alterações realizadas.
+
+## Checklist
+- [ ] Título do PR segue o padrão
+- [ ] Conteúdo revisado por outro membro
+- [ ] Issue relacionada foi mencionada
+
+## Issue relacionada
+Closes #
+```
+
+## Para documentar
+
+Siga os seguintes passos para visualizar a documentação localmente:
+
+```markdown
+# Instalar o MkDocs e o tema Material 
+pip install -r requirements.txt
+
+# Visualizar o site localmente
+mkdocs serve
+```
+
+## Deploy
+
+Siga os seguintes passos para fazer o deploy da documentação:
+
+```markdown
+# Realizar o deploy automático para o GitHub Pages
+mkdocs gh-pages
+```
