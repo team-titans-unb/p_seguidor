@@ -3,7 +3,7 @@
 ## Sumário
 
 - [Metadados do esquemático](#metadados-do-esquematico)
-- [Visualização do PDF (esquemático)](#visualizacao-do-pdf-esquematico)
+- [Visualização do esquemático](#visualizacao-do-esquematico)
 - [Alimentação e regulação](#alimentacao-e-regulacao)
 - [MCU (ESP32) e pinagem relevante](#mcu-esp32-e-pinagem-relevante)
 - [Motores, ponte H e encoders](#motores-ponte-h-e-encoders)
@@ -17,11 +17,11 @@
 
 ## Metadados do esquemático
 
-Os dados abaixo foram extraídos do arquivo **Seguidor1Base-1.pdf** (folha 1 de 3 do projeto **Seguidor1Base** no Altium).
+Os dados abaixo foram extraídos da exportação do esquemático (**Seguidor1Base-2.jpg**) e do projeto **Seguidor1Base** no Altium (documento **Seguidor1Base-1.pdf**, quando aplicável).
 
 <font size="3">
     <p style="text-align: center">
-        <b>Tabela 1:</b> Identificação do desenho (fonte: PDF do esquemático)
+        <b>Tabela 1:</b> Identificação do desenho (fonte: esquemático exportado)
     </p>
 </font>
 
@@ -30,7 +30,7 @@ Os dados abaixo foram extraídos do arquivo **Seguidor1Base-1.pdf** (folha 1 de 
     <thead>
       <tr>
         <th>Campo</th>
-        <th>Valor indicado no PDF</th>
+        <th>Valor indicado no desenho</th>
       </tr>
     </thead>
     <tbody>
@@ -44,11 +44,11 @@ Os dados abaixo foram extraídos do arquivo **Seguidor1Base-1.pdf** (folha 1 de 
       </tr>
       <tr>
         <td>Folha</td>
-        <td>1 de 3</td>
+        <td>1 de 1</td>
       </tr>
       <tr>
         <td>Revisão do documento</td>
-        <td>1.03.2026</td>
+        <td>26.04.2026</td>
       </tr>
       <tr>
         <td>Autor (campo APPROVALS / AUTHOR)</td>
@@ -67,29 +67,28 @@ Os dados abaixo foram extraídos do arquivo **Seguidor1Base-1.pdf** (folha 1 de 
 </div>
 
 !!! tip "Atenção"
-    O PDF completo está versionado em `docs/pages/paoDeQueijo/dados/Seguidor1Base-1.pdf` para abrir no navegador ou fazer download a partir da documentação MkDocs.
+    A figura interativa desta página usa **`dados/Seguidor1Base-2.jpg`**. O PDF do projeto, encontra-se em `docs/pages/paoDeQueijo/dados/Seguidor1Base-1.pdf`.
 
 ---
 
-## Visualização do PDF (esquemático)
+## Visualização do esquemático
 
-Use o link para abrir em nova aba (recomendado em dispositivos móveis) ou o quadro embutido abaixo.
+<font size="3">
+    <p style="text-align: center">
+        <b>Figura 1:</b> Esquemático robô pão de queijo
+        <br>
+    </p>
+</font>
 
-<p style="text-align: center">
-  <a href="dados/Seguidor1Base-1.pdf" target="_blank" rel="noopener">Abrir o esquemático em PDF (nova aba)</a>
-  ·
-  <a href="dados/Seguidor1Base-1.pdf" download>Baixar Seguidor1Base-1.pdf</a>
-</p>
-
-<div style="text-align: center; width: 100%; min-height: 720px;">
-  <iframe
-    title="Esquemático Base Seguidor 1 — PDF"
-    src="dados/Seguidor1Base-1.pdf"
-    width="100%"
-    height="720"
-    style="border: 1px solid #ccc; max-width: 100%;"
-  ></iframe>
+<div align="center">
+  <img src="blob:null/d6bfdd02-e5e5-4553-a657-35a18675c6e8" width="600">
 </div>
+
+<font size="3">
+    <p style="text-align: center">
+       
+   
+</font>
 
 ---
 
@@ -211,7 +210,7 @@ A folha associa linhas nomeadas **D8 … D0**, **LEDON** e conexões a pinos do 
 
 <font size="3">
     <p style="text-align: center">
-        <b>Tabela 2:</b> Parâmetros elétricos e funcionais destacados (fonte: Seguidor1Base-1.pdf)
+        <b>Tabela 2:</b> Parâmetros elétricos e funcionais destacados (fonte: esquemático — Seguidor1Base-2.jpg)
     </p>
 </font>
 
@@ -282,7 +281,7 @@ A folha associa linhas nomeadas **D8 … D0**, **LEDON** e conexões a pinos do 
 
 ## Referências bibliográficas
 
-> [1] Documento de projeto **Seguidor1Base-1.pdf** — esquemático Altium (**Esquemático Base Seguidor 1**), autor **Henrique de O. Bernardes**, revisão de documento **1.03.2026**, folha **1/3**. Cópia para documentação: `docs/pages/paoDeQueijo/dados/Seguidor1Base-1.pdf`.
+> [1] Projeto Altium **Seguidor1Base** — esquemático **Esquemático Base Seguidor 1**, autor **Henrique de O. Bernardes**. Exportação usada na documentação: **`docs/pages/paoDeQueijo/dados/Seguidor1Base-2.jpg`**; PDF de referência: **`docs/pages/paoDeQueijo/dados/Seguidor1Base-1.pdf`**.
 
 > [2] Espressif Systems. **ESP32 Series Datasheet** — pinout, limites de tensão por GPIO e notas de hardware. Consultar a versão aplicável ao módulo usado na montagem.
 
@@ -295,4 +294,4 @@ A folha associa linhas nomeadas **D8 … D0**, **LEDON** e conexões a pinos do 
 | Versão | Descrição | Autor(es) | Data de produção | Revisor(es) | Observações |
 | :----: | --------- | --------- | :--------------: | :-----------: | ----------- |
 | `1.0` | Modelagem inicial do readme | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 02/03/2026 | — | Conteúdo inicial curto. |
-| `1.1` | Página modelada no padrão do relatório (sumário, tabelas, PDF embutido) e parâmetros extraídos do **Seguidor1Base-1.pdf** | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 04/05/2026 | — | PDF copiado para `dados/Seguidor1Base-1.pdf`. |
+| `1.1` | Página modelada (sumário, tabelas) e parâmetros extraídos do esquemático; visualização com **Seguidor1Base-2.jpg** em `dados/` | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 04/05/2026 | — | Imagem do esquemático no lugar do PDF embutido. |
