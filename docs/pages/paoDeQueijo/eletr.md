@@ -81,7 +81,7 @@ Os dados abaixo foram extraídos da exportação do esquemático (**Seguidor1Bas
 </font>
 
 <div align="center">
-  <img src="blob:null/d6bfdd02-e5e5-4553-a657-35a18675c6e8" width="600">
+  <img src="https://raw.githubusercontent.com/team-titans-unb/p_seguidor/refs/heads/main/docs/pages/paoDeQueijo/dados/Seguidor1Base-2.jpg" width="600">
 </div>
 
 <font size="3">
