@@ -65,9 +65,6 @@ Os dados abaixo foram extraídos das projeções técnicas geradas a partir da m
   </table>
 </div>
 
-!!! tip "Atenção"
-    As figuras interativas desta página usa **`dados/Seguidor1cad-superior.jpg`**. O PDF do projeto, encontra-se em `docs/pages/paoDeQueijo/dados/Seguidor1Base-1.pdf`.
-
 ---
 ## Visualizacao do esquematico cad
 
