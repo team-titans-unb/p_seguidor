@@ -1,4 +1,4 @@
-# Mecânica — Esquemático Base Seguidor 1 (Pão de Queijo)
+# Mecânica — Esquemático Seguidor 1 (Pão de Queijo)
 
 
 --- 
