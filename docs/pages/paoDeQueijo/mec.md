@@ -82,8 +82,6 @@ Os dados abaixo foram extraídos das projeções técnicas geradas a partir da m
 
 ## Referências bibliográficas
 
-## Histórico de Versões
-
 
 ## Histórico de Versões
 
