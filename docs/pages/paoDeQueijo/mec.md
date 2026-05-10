@@ -124,7 +124,6 @@ A distribuição de peso foi planejada para manter o **Centro de Gravidade (CG)*
 * **Largura de bitola:** 145,00 mm
 * **Comprimento da haste de sensores:** 70,00 mm
 * **Largura do suporte de componentes:** 30,00 mm
-* **Tipo de Direção:** Diferencial
 
 ---
 
