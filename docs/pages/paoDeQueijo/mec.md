@@ -65,7 +65,7 @@ Os dados abaixo foram extraídos das projeções técnicas geradas a partir da m
 
 ## Visualização do esquemático CAD
 
-
+https://github.com/team-titans-unb/p_seguidor/blob/main/docs/pages/paoDeQueijo/dados/Seguidor1cad-frontal.JPG
 ---
 
 ## Chassi e Estrutura
