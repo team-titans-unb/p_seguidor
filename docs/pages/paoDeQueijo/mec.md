@@ -66,19 +66,17 @@ Os dados abaixo foram extraídos das projeções técnicas geradas a partir da m
 ## Visualização do esquemático CAD
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/team-titans-unb/p_seguidor/main/docs/pages/paoDeQueijo/dados/Seguidor1cad-frontal.JPG" width="600">
-  <p><b>Figura 1:</b> Esquemático robô pão de queijo (Fonte: Gustavo)</p>
+  <img src="https://raw.githubusercontent.com/team-titans-unb/p_seguidor/main/docs/pages/paoDeQueijo/dados/Seguidor1cad-superior.JPG" width="600">
+  <p><b>Figura 1:</b> Vista Superior </p>
 </div>
+
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/team-titans-unb/p_seguidor/main/docs/pages/paoDeQueijo/dados/Seguidor1cad-lateral.JPG" width="600">
-  <p><b>Figura 2:</b> Esquemático robô pão de queijo (Fonte: Gustavo)</p>
+  <p><b>Figura 2:</b> Vista lateral </p>
 </div>
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/team-titans-unb/p_seguidor/main/docs/pages/paoDeQueijo/dados/Seguidor1cad-superior.JPG" width="600">
-  <p><b>Figura 3:</b> Esquemático robô pão de queijo (Fonte: Gustavo)</p>
-</div>
+
 
 ---
 
