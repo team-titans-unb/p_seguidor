@@ -1,6 +1,6 @@
 # Mecânica — Esquemático Seguidor 1 (Pão de Queijo)
 
-Este documento detalha as especificações técnicas, escolhas de design e métricas da estrutura mecânica do robô seguidor de linha **Pão de Queijo**.
+Este documento detalha as especificações técnicas, escolhas de design e métricas da estrutura mecânica do robô seguidor de linha Pão de Queijo.
 
 --- 
 
