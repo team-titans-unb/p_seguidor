@@ -151,4 +151,4 @@ A distribuição de peso foi planejada para manter o **Centro de Gravidade (CG)*
 | Versão | Descrição | Autor(es) | Data de Produção | Revisor(es) |
 | :----: | --------- | --------- | :--------------: | :--------------: |
 | `1.0` | Modelagem inicial e documentação básica | Felipe das Neves | 02/03/2026 | ✓ |
-| `1.1` |  | Thamires Ellen | 10/05/2026 | ✓ |
+| `1.1` | Documentação inicial | Thamires Ellen | 10/05/2026 | ✓ |
