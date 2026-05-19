@@ -95,9 +95,9 @@ O chassi foi projetado utilizando uma abordagem de **plataforma integrada**, ond
 
 O sistema de tração é composto por dois motores independentes posicionados lateralmente na base de 145mm.
 
-* **Suportes de Motor:** 
+* **Suportes de Motor:** Integrados diretamente à estrutura do chassi principal por meio de abraçadeiras personalizadas impressas em 3D e fixadas com parafusos M3. Este design garante o alinhamento perfeito do eixo dos micromotores (padrão de engrenagem metálica 20D), eliminando folgas que poderiam prejudicar a odometria e a resposta dinâmica do robô.
   
-* **Configuração de Apoio:** 
+* **Configuração de Apoio:** Configuração do tipo Differential Drive (Diferencial) com duas rodas de tração traseiras e um apoio deslizante esférico (caster wheel ou ball caster) de poliacetal (POM) na extremidade frontal, posicionado logo abaixo da haste de sensores. Essa disposição minimiza o atrito estático com a pista e mantém a distância constante entre os sensores de refletância e o solo.
 
 ---
 
@@ -107,9 +107,9 @@ Para garantir o equilíbrio entre peso e resistência, sugerem-se os seguintes m
 
 | Componente | Material | Justificativa |
 | :--- | :--- | :--- |
-| Placa Base |  |  |
-| Haste Treliçada | ||
-| Pneus | |  |
+| Placa Base | A definir (Alternativas: ABS ou PLA) | Escolhido devido à facilidade de fabricação por impressão 3D e boa resistência mecânica estrutural. |
+| Haste Treliçada | A definir (Alternativas: PLA ou PETG) | Material leve e rígido, ideal para manter a haste de sensores firme sem adicionar peso excessivo na frente. |
+| Pneus | Silicone | Materiais que oferecem propriedades elásticas e boa aderência (grip) com o solo para evitar derrapagen |
 
 ---
 
@@ -117,9 +117,9 @@ Para garantir o equilíbrio entre peso e resistência, sugerem-se os seguintes m
 
 1.  **Modelagem:** Realizada no Fusion 360 com foco em parametrização.
    
-2.  **Manufatura Aditiva:** 
+2.  **Manufatura Aditiva:** Os componentes estruturais (chassi e haste) são fabricados via FDM. Configurações recomendadas: altura de camada de 0,2 mm, preenchimento (infill) de 30% em padrão giroidal para otimizar a relação resistência/peso, e 4 paredes perimetrais para garantir fixação firme dos parafusos.
    
-3.  **Montagem:** 
+3.  **Montagem:** Fixação mecânica utilizando parafusos e porcas M3 de aço inoxidável auto-travantes para evitar o afrouxamento devido às vibrações de alta frequência dos motores. Os sensores e placas eletrônicas são fixados na largura de suporte dedicada de 30,00 mm por meio de espaçadores de nylon.
 ---
 
 ## Análise de Massa e Centro de Gravidade
