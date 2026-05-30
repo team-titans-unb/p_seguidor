@@ -6,7 +6,7 @@ Este documento descreve a infraestrutura de software e a estratégia de controle
 
 ---
 
-## 📌 Sumário
+##  Sumário
 - [Mapeamento de Hardware no Controle](#mapeamento-de-hardware-no-controle)
 - [Estratégia de Controle da Malha Principal (PID)](#estrategia-de-controle-da-malha-principal-pid)
 - [Leitura de Odometria (Encoders)](#leitura-de-odometria-encoders)
@@ -15,7 +15,7 @@ Este documento descreve a infraestrutura de software e a estratégia de controle
 
 ---
 
-## 🔌 Mapeamento de Hardware no Controle
+##  Mapeamento de Hardware no Controle
 
 O firmware executado no **ESP32** faz a interface direta com os atuadores e sensores através da seguinte pinagem homologada:
 
@@ -31,7 +31,7 @@ Como indicado nas notas de projeto, os pinos de leitura dos encoders utilizam pi
 
 ---
 
-## 📐 Estratégia de Controle da Malha Principal (PID)
+##  Estratégia de Controle da Malha Principal (PID)
 
 O robô opera em **malha fechada** utilizando um algoritmo de controle Proporcional, Integral e Derivativo ($PID$) para calcular a correção de trajetória baseada no erro de centralização na linha.
 
@@ -48,7 +48,7 @@ $$\text{Velocidade}_{\text{Direita}} = \text{Velocidade}_{\text{Base}} - u(t)$$
 
 ---
 
-## 🔄 Leitura de Odometria (Encoders)
+##  Leitura de Odometria (Encoders)
 
 Os motores **100:1 Micro Metal Gearmotor HPCB** possuem encoders integrados de efeito Hall. Como os pinos do ESP32 utilizados (34, 35, 36, 39) não possuem resistores de *pull-up* internos acionáveis por software, o circuito físico deve garantir o nível lógico correto.
 
@@ -57,7 +57,7 @@ Para garantir precisão milimétrica em altas velocidades, a leitura dos encoder
 
 ---
 
-## 👁️ Tratamento dos Sensores (QRE-8D)
+##  Tratamento dos Sensores (QRE-8D)
 
 O módulo frontal **QRE-8D** gera leituras analógicas ou digitais através do barramento de dados `D0–D8`. 
 
@@ -70,7 +70,7 @@ Onde $S_i$ representa a leitura normalizada do sensor $i$, e $W_i$ representa o 
 
 ---
 
-## 💻 Estrutura do Código Base (C++ / Arduino IDE)
+##  Estrutura do Código Base (C++ / Arduino IDE)
 
 Abaixo encontra-se a arquitetura inicial recomendada para o gerenciamento das tarefas de controle utilizando o ecossistema do ESP32:
 
