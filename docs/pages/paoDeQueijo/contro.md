@@ -1,6 +1,6 @@
-#  Documentação do Robô Pão de Queijo
+#  Documentação - Robô Pão de Queijo
 
-Este documento descreve a infraestrutura de software e a estratégia de controle projetadas para o robô seguidor de linha, mapeadas diretamente com o hardware definido no esquema elétrico `Seguidor1Base.SchDoc`.
+Este documento descreve a infraestrutura de software e a estratégia de controle projetadas para o robô seguidor de linha.
 
 ---
 
@@ -82,7 +82,7 @@ A leitura da linha é feita por um array reflexivo compatível com o módulo **Q
 
 O projeto adota práticas de Programação Orientada a Objetos (POO) para isolar o acoplamento do código físico. A complexidade de baixo nível do hardware fica encapsulada de forma protegida dentro da classe `Motors`.
 
-### 🏎️ Abstração dos Motores (`Motors` Class)
+###  Abstração dos Motores (`Motors` Class)
 
 A classe utiliza a API moderna do ecossistema ESP32 (`ledcAttachChannel`), vinculando de maneira nativa os pinos do driver à estrutura do periférico de hardware LEDC do chip.
 
@@ -97,7 +97,7 @@ A classe utiliza a API moderna do ecossistema ESP32 (`ledcAttachChannel`), vincu
 
 ---
 
-## 💻 Exemplo de Implementação
+##  Exemplo de Implementação
 
 Abaixo encontra-se a estrutura básica do loop principal do firmware:
 
