@@ -143,4 +143,4 @@ void loop() {
 | Versão | Descrição | Autor(es) | Data de Produção | Revisor(es) |
 | :----: | --------- | --------- | :--------------: | :--------------: | 
 | `1.0` | Modelagem inicial do readme | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 02/03/2026 | ✓ |
-| `1.1` | Modelagem e complementação de seções técnicas | Thamires Ellen | 29/05/2026 | ✓ | 
+| `1.1` | Modelagem e complementação de seções técnicas | [Thamires Ellen](https://github.com/thamiresellensa) | 29/05/2026 | ✓ | 
