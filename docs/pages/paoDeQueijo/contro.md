@@ -1,147 +1,145 @@
-# Documentação do Robô Pão de Queijo
+# 🤖 Documentação do Robô Pão de Queijo
 
---- 
-
-Este documento descreve a infraestrutura de software e a estratégia de controle projetadas para o robô seguidor de linha, mapeadas diretamente com o hardware definido em `Seguidor1Base.SchDoc`.
+Este documento descreve a infraestrutura de software e a estratégia de controle projetadas para o robô seguidor de linha, mapeadas diretamente com o hardware definido no esquema elétrico `Seguidor1Base.SchDoc`.
 
 ---
 
 ##  Sumário
 - [Mapeamento de Hardware no Controle](#mapeamento-de-hardware-no-controle)
-- [Estratégia de Controle da Malha Principal (PID)](#estrategia-de-controle-da-malha-principal-pid)
+- [Estratégia de Controle da Malha Principal (PID)](#estratégia-de-controle-da-malha-principal-pid)
 - [Leitura de Odometria (Encoders)](#leitura-de-odometria-encoders)
 - [Tratamento dos Sensores (QRE-8D)](#tratamento-dos-sensores-qre-8d)
-- [Estrutura do Código Base](#estrutura-do-codigo-base)
+- [Arquitetura de Software e Classes](#arquitetura-de-software-e-classes)
+- [Exemplo de Implementação](#-exemplo-de-implementação)
+- [Histórico de Versões](#histórico-de-versões)
 
 ---
 
-##  Mapeamento de Hardware no Controle
+## Mapeamento de Hardware no Controle
 
-O firmware executado no **ESP32** faz a interface direta com os atuadores e sensores através da seguinte pinagem homologada:
+O mapeamento de pinos e as definições de software abaixo garantem o acoplamento correto com os recursos de hardware da ESP32.
 
-### Atuação (Ponte H L298N Mini)
-Os pinos de entrada da ponte H controlam o sentido de rotação e a velocidade via PWM. Os pinos definidos no esquemático são:
-* **Motor Esquerdo (Canais de Direção):** Vinculado ao sinal **IN1** (GPIO32).
-* **Motor Direito (Canais de Direção):** Vinculado ao sinal **IN3** (GPIO33).
+### Tabela de Pinagem
 
-### Entrada de Sinais (Restrição Input-Only)
-Como indicado nas notas de projeto, os pinos de leitura dos encoders utilizam pinos estritamente de entrada (*Input Only*) do ESP32:
-* **Encoder Motor A (Canais):** GPIO36 e GPIO39.
-* **Encoder Motor B (Canais):** GPIO34 e GPIO35.
+| Componente | Função | Pino / Canal |
+| :--- | :--- | :--- |
+| **Sensor QTR (LEDON)** | Controle do Emissor LED | Pino `19` |
+| **Sensores QTR (Array)** | Leitura de Linha (8 sensores) | Pinos: `18, 5, 17, 16, 4, 0, 2, 15` |
+| **Motor Direito** | Controle de Direção / PWM | Pino `32` / Canal `0` |
+| **Motor Esquerdo** | Controle de Direção / PWM | Pino `33` / Canal `1` |
+| **Encoder Esquerdo** | Canal A / Canal B | Pino `36` / Pino `39` |
+| **Encoder Direito** | Canal A / Canal B | Pino `35` / Pino `34` |
 
----
+### Configurações de Software (`SPECS`)
 
-##  Estratégia de Controle da Malha Principal (PID)
-
-O robô opera em **malha fechada** utilizando um algoritmo de controle Proporcional, Integral e Derivativo ($PID$) para calcular a correção de trajetória baseada no erro de centralização na linha.
-
-O sinal de correção $u(t)$ é calculado por:
-
-$$u(t) = K_p \cdot e(t) + K_i \int_{0}^{t} e(\tau) d\tau + K_d \frac{de(t)}{dt}$$
-
-Onde:
-* $e(t)$ é o erro instantâneo gerado pela leitura da placa de sensores **QRE-8D**.
-* O resultado do sinal calculado determina o diferencial de velocidade aplicado às rodas:
-
-$$\text{Velocidade}_{\text{Esquerda}} = \text{Velocidade}_{\text{Base}} + u(t)$$
-$$\text{Velocidade}_{\text{Direita}} = \text{Velocidade}_{\text{Base}} - u(t)$$
+* **Frequência do PWM:** 50 kHz (`FREQ 50000`) — Garante operação silenciosa dos motores, acima da faixa audível humana.
+* **Resolução do PWM:** 8 bits (`RES 8`) — Permite o controle de velocidade em uma escala de 0 a 255.
+* **Velocidade Base:** 120 (`BASE_VEL`) — Velocidade nominal de cruzeiro do robô em trechos retos.
+* **Quantidade de Sensores:** 8 (`SENSOR_QNT`)
+* **Centro do Sensor (Setpoint):** `2500` — Valor de referência para manter o robô centralizado na linha.
 
 ---
 
-##  Leitura de Odometria (Encoders)
+## Estratégia de Controle da Malha Principal (PID)
 
-Os motores **100:1 Micro Metal Gearmotor HPCB** possuem encoders integrados de efeito Hall. Como os pinos do ESP32 utilizados (34, 35, 36, 39) não possuem resistores de *pull-up* internos acionáveis por software, o circuito físico deve garantir o nível lógico correto.
+O firmware implementa três pilares essenciais para assegurar precisão e estabilidade dinâmica durante a navegação na pista:
 
-### Configuração das Interrupções
-Para garantir precisão milimétrica em altas velocidades, a leitura dos encoders utiliza interrupções de hardware externas (`RISING` ou `CHANGE`), computando os pulsos em tempo real para cálculo de velocidade linear individual e odometria da pista.
+### 1. Rotina de Calibração (`calibrationRoutine`)
+Ao iniciar, o robô rotaciona levemente para a direita executando 100 leituras consecutivas com a biblioteca `QTRSensors`. Esse processo mapeia os limiares de máxima e mínima refletância do ambiente (calibração de preto e branco), adaptando o robô às variações de luz da pista.
+
+### 2. Algoritmo de Controle PID (`pid`)
+Para corrigir os desvios de trajetória, o sistema calcula o erro em relação ao centro da linha e aplica correções matemáticas baseadas em tempo real ($dt$):
+* **P (Proporcional):** Fornece uma correção diretamente proporcional ao erro atual.
+* **I (Integral):** Acumula o erro ao longo do tempo para eliminar desvios residuais de alinhamento.
+* **D (Derivativo):** Avalia a velocidade de variação do erro para amortecer a resposta física e mitigar oscilações abruptas.
+
+A equação matemática aplicada no código é:
+
+$$Output = (Kp \times P) + (Ki \times I) + (Kd \times D)$$
+
+### 3. Temporização Dinâmica
+O loop de controle monitora o tempo de execução através da função `micros()`. O cálculo de tempo decorrido ($dt$) assegura que os ganhos Integral e Derivativo sejam independentes de variações no tempo de processamento das tarefas da CPU.
 
 ---
 
-##  Tratamento dos Sensores (QRE-8D)
+## Leitura de Odometria (Encoders)
 
-O módulo frontal **QRE-8D** gera leituras analógicas ou digitais através do barramento de dados `D0–D8`. 
-
-1. **Normalização:** Os valores brutos lidos do barramento são calibrados entre `0` (superfície totalmente clara) e `1000` (superfície totalmente escura).
-2. **Cálculo de Centro de Massa (Média Ponderada):** A posição da linha sob o array de sensores é calculada pela equação:
-
-$$\text{Posição} = \frac{\sum_{i=0}^{n} (S_i \cdot W_i)}{\sum_{i=0}^{n} S_i}$$
-
-Onde $S_i$ representa a leitura normalizada do sensor $i$, e $W_i$ representa o peso ponderado da distância daquele sensor em relação ao centro geométrico do robô.
+O robô está equipado com encoders de quadratura mapeados nos pinos de interrupção da ESP32. 
+* As leituras utilizam sub-rotinas de interrupção rápida (**ISR** - *Interrupt Service Routines*) marcadas com o atributo `IRAM_ATTR` para garantir execução imediata diretamente na memória RAM do chip.
+* Esta infraestrutura foi projetada para calcular a distância percorrida e a velocidade real de cada roda, permitindo futuras implementações de controle de velocidade em malha fechada e mapeamento de curvas.
 
 ---
 
-##  Estrutura do Código Base (C++ / Arduino IDE)
+## Tratamento dos Sensores (QRE-8D)
 
-Abaixo encontra-se a arquitetura inicial recomendada para o gerenciamento das tarefas de controle utilizando o ecossistema do ESP32:
+A leitura da linha é feita por um array reflexivo compatível com o módulo **QRE-8D** (8 sensores de leitura por descarga de capacitor RC).
+* O método `qtr.readLineWhite(sensorValues)` faz a leitura analógica/digital dos 8 canais em paralelo e calcula a posição estimada do robô sobre uma linha branca usando uma média ponderada.
+* O pino `LEDON` (`19`) atua controlando dinamicamente os emissores infravermelhos, permitindo desligá-los quando o robô estiver ocioso para economizar energia do conjunto de baterias.
+
+---
+
+## Arquitetura de Software e Classes
+
+O projeto adota práticas de Programação Orientada a Objetos (POO) para isolar o acoplamento do código físico. A complexidade de baixo nível do hardware fica encapsulada de forma protegida dentro da classe `Motors`.
+
+### 🏎️ Abstração dos Motores (`Motors` Class)
+
+A classe utiliza a API moderna do ecossistema ESP32 (`ledcAttachChannel`), vinculando de maneira nativa os pinos do driver à estrutura do periférico de hardware LEDC do chip.
+
+#### Métodos da Classe (API)
+
+| Método | Tipo de Retorno | Parâmetros | Descrição |
+| :--- | :---: | :--- | :--- |
+| **`Motors`** | Construtor | `int`, `int`, `int`, `int`, `int`, `int` | Instancia a classe configurando pinos, canais, frequência e resolução. Invoca o método interno `config()`. |
+| **`setRightSpeed`** | `void` | `int velocity` | Atualiza o ciclo de trabalho (Duty Cycle) do motor direito via `ledcWrite`. |
+| **`setLeftSpeed`** | `void` | `int velocity` | Atualiza o ciclo de trabalho (Duty Cycle) do motor esquerdo via `ledcWrite`. |
+| **`setSpeeds`** | `void` | `int velocity_R`, `int velocity_L` | Atualiza a velocidade de ambos os motores ao mesmo tempo. |
+
+---
+
+## 💻 Exemplo de Implementação
+
+Abaixo encontra-se a estrutura básica do loop principal do firmware:
 
 ```cpp
 #include <Arduino.h>
+#include <motors.h>
+#include <QTRSensors.h>
 
-// Definição dos Pinos de acordo com o Esquemático Base
-const int PIN_IN1 = 32; // Controle Motor Esquerdo
-const int PIN_IN3 = 33; // Controle Motor Direito
+// Instanciação dos periféricos
+QTRSensors qtr;
+Motors motors(IN1_R, IN1_L, CHN_R, CHN_L, FREQ, RES);
 
-const int PIN_ENC_A1 = 36; // Input Only - Sem pull-up interno
-const int PIN_ENC_A2 = 39; // Input Only - Sem pull-up interno
-const int PIN_ENC_B1 = 34; // Input Only - Sem pull-up interno
-const int PIN_ENC_B2 = 35; // Input Only - Sem pull-up interno
-
-// Parâmetros do Controle PID
-float Kp = 1.5;
-float Ki = 0.0;
-float Kd = 0.8;
-
-int erroAnterior = 0;
-float integral = 0;
-const int velocidadeBase = 180; // Escala PWM (0-255)
+uint16_t sensorValues[8];
+int center = 2500;
+int16_t BASE_VEL = 120;
 
 void setup() {
-    // Configurações de saídas para Ponte H L298N Mini
-    pinMode(PIN_IN1, OUTPUT);
-    pinMode(PIN_IN3, OUTPUT);
-
-    // Configuração dos pinos Input-Only dos Encoders
-    // Nota: Certifique-se de que a placa possui resistores de pull-up físicos!
-    pinMode(PIN_ENC_A1, INPUT);
-    pinMode(PIN_ENC_A2, INPUT);
-    pinMode(PIN_ENC_B1, INPUT);
-    pinMode(PIN_ENC_B2, INPUT);
+  motors.setSpeeds(0, 0); // Inicia parado
+  
+  qtr.setTypeRC();
+  qtr.setSensorPins((const uint8_t[]){18, 5, 17, 16, 4, 0, 2, 15}, 8);
+  
+  Serial.begin(115200);
+  delay(500);
+  
+  calibrationRoutine(); // Executa calibração em pista
 }
 
 void loop() {
-    int erroAtual = obterErroPista(); // Processa dados do QRE-8D
-    
-    float P = erroAtual;
-    integral += erroAtual;
-    float D = erroAtual - erroAnterior;
-    
-    float controle = (Kp * P) + (Ki * integral) + (Kd * D);
-    erroAnterior = erroAtual;
-    
-    // Cálculo do sinal diferencial para os motores
-    int velEsq = velocidadeBase + controle;
-    int velDir = velocidadeBase - controle;
-    
-    // Saturação dos sinais nos limites do PWM do ESP32
-    velEsq = constrain(velEsq, 0, 255);
-    velDir = constrain(velDir, 0, 255);
-    
-    // Comandos de escrita física nos pinos de potência
-    analogWrite(PIN_IN1, velEsq);
-    analogWrite(PIN_IN3, velDir);
+  // Executa o cálculo do PID e atualiza motores continuamente
+  uint16_t pos = qtr.readLineWhite(sensorValues);
+  int16_t error = center - pos;
+  int16_t correction = pid(error);
+  
+  int16_t vel_R = constrain(BASE_VEL + correction, 0, 255);
+  int16_t vel_L = constrain(BASE_VEL - correction, 0, 255);
+  
+  motors.setSpeeds(vel_R, vel_L);
 }
-
-int obterErroPista() {
-    // Lógica para leitura do barramento D0-D8 e cálculo do erro central
-    return 0; 
-}
-
-
----
-
 ## Histórico de Versões
 
 | Versão | Descrição | Autor(es) | Data de Produção | Revisor(es) |
 | :----: | --------- | --------- | :--------------: | :--------------: | 
 | `1.0` | Modelagem inicial do readme | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 02/03/2026 | ✓ |
-| `1.1` | Modelagem inicial | Thamires Ellen | 29/05/2026 | ✓ | 
+| `1.1` | Modelagem e complementação de seções técnicas | Thamires Ellen | 29/05/2026 | ✓ | 
