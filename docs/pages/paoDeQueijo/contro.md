@@ -1,4 +1,4 @@
-# 🤖 Documentação do Robô Pão de Queijo
+#  Documentação do Robô Pão de Queijo
 
 Este documento descreve a infraestrutura de software e a estratégia de controle projetadas para o robô seguidor de linha, mapeadas diretamente com o hardware definido no esquema elétrico `Seguidor1Base.SchDoc`.
 
