@@ -137,6 +137,7 @@ void loop() {
   
   motors.setSpeeds(vel_R, vel_L);
 }
+```
 ## Histórico de Versões
 
 | Versão | Descrição | Autor(es) | Data de Produção | Revisor(es) |
