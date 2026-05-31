@@ -1,144 +1,291 @@
-#  Documentação - Robô Pão de Queijo
+# Documentação - Robô Pão de Queijo
 
-Este documento descreve a infraestrutura de software e a estratégia de controle projetadas para o robô seguidor de linha.
+Este documento descreve a infraestrutura de software, o mapeamento de hardware e a estratégia de controle implementados na versão atual do robô seguidor de linha baseado na ESP32.
 
----
-
-##  Sumário
-- [Mapeamento de Hardware no Controle](#mapeamento-de-hardware-no-controle)
-- [Estratégia de Controle da Malha Principal (PID)](#estratégia-de-controle-da-malha-principal-pid)
-- [Leitura de Odometria (Encoders)](#leitura-de-odometria-encoders)
-- [Tratamento dos Sensores (QRE-8D)](#tratamento-dos-sensores-qre-8d)
-- [Arquitetura de Software e Classes](#arquitetura-de-software-e-classes)
-- [Exemplo de Implementação](#-exemplo-de-implementação)
-- [Histórico de Versões](#histórico-de-versões)
+> **Importante:** Esta documentação reflete o estado atual do firmware. Algumas estruturas, como o controlador PID completo e a leitura de encoders, já possuem suporte inicial no código, porém ainda não estão totalmente implementadas.
 
 ---
 
-## Mapeamento de Hardware no Controle
+# Sumário
 
-O mapeamento de pinos e as definições de software abaixo garantem o acoplamento correto com os recursos de hardware da ESP32.
-
-### Tabela de Pinagem
-
-| Componente | Função | Pino / Canal |
-| :--- | :--- | :--- |
-| **Sensor QTR (LEDON)** | Controle do Emissor LED | Pino `19` |
-| **Sensores QTR (Array)** | Leitura de Linha (8 sensores) | Pinos: `18, 5, 17, 16, 4, 0, 2, 15` |
-| **Motor Direito** | Controle de Direção / PWM | Pino `32` / Canal `0` |
-| **Motor Esquerdo** | Controle de Direção / PWM | Pino `33` / Canal `1` |
-| **Encoder Esquerdo** | Canal A / Canal B | Pino `36` / Pino `39` |
-| **Encoder Direito** | Canal A / Canal B | Pino `35` / Pino `34` |
-
-### Configurações de Software (`SPECS`)
-
-* **Frequência do PWM:** 50 kHz (`FREQ 50000`) — Garante operação silenciosa dos motores, acima da faixa audível humana.
-* **Resolução do PWM:** 8 bits (`RES 8`) — Permite o controle de velocidade em uma escala de 0 a 255.
-* **Velocidade Base:** 120 (`BASE_VEL`) — Velocidade nominal de cruzeiro do robô em trechos retos.
-* **Quantidade de Sensores:** 8 (`SENSOR_QNT`)
-* **Centro do Sensor (Setpoint):** `2500` — Valor de referência para manter o robô centralizado na linha.
+* [Mapeamento de Hardware no Controle](#mapeamento-de-hardware-no-controle)
+* [Tratamento dos Sensores (QRE-8D)](#tratamento-dos-sensores-qre-8d)
+* [Estratégia de Controle da Malha Principal](#estratégia-de-controle-da-malha-principal)
+* [Leitura de Odometria (Encoders)](#leitura-de-odometria-encoders)
+* [Arquitetura de Software e Classes](#arquitetura-de-software-e-classes)
+* [Exemplo de Implementação](#exemplo-de-implementação-código-do-firmware)
+* [Histórico de Versões](#histórico-de-versões)
 
 ---
 
-## Estratégia de Controle da Malha Principal (PID)
+# Mapeamento de Hardware no Controle
 
-O firmware implementa três pilares essenciais para assegurar precisão e estabilidade dinâmica durante a navegação na pista:
+O projeto utiliza uma ESP32 como unidade principal de processamento, responsável pela leitura dos sensores, cálculo das correções de trajetória e acionamento dos motores.
 
-### 1. Rotina de Calibração (`calibrationRoutine`)
-Ao iniciar, o robô rotaciona levemente para a direita executando 100 leituras consecutivas com a biblioteca `QTRSensors`. Esse processo mapeia os limiares de máxima e mínima refletância do ambiente (calibração de preto e branco), adaptando o robô às variações de luz da pista.
+## Tabela de Pinagem
 
-### 2. Algoritmo de Controle PID (`pid`)
-Para corrigir os desvios de trajetória, o sistema calcula o erro em relação ao centro da linha e aplica correções matemáticas baseadas em tempo real ($dt$):
-* **P (Proporcional):** Fornece uma correção diretamente proporcional ao erro atual.
-* **I (Integral):** Acumula o erro ao longo do tempo para eliminar desvios residuais de alinhamento.
-* **D (Derivativo):** Avalia a velocidade de variação do erro para amortecer a resposta física e mitigar oscilações abruptas.
+| Componente         | Função Física             | Pino / Canal                      | Observação                           |
+| ------------------ | ------------------------- | --------------------------------- | ------------------------------------ |
+| Sensor QTR (LEDON) | Controle dos emissores IR | GPIO 19                           | Utilizado pela biblioteca QTRSensors |
+| Sensores QTR       | Leitura da linha          | GPIOs 18, 5, 17, 16, 4, 0, 2 e 15 | Configuração RC                      |
+| Motor Direito      | PWM                       | GPIO 32 / Canal 0                 | Controle de velocidade               |
+| Motor Esquerdo     | PWM                       | GPIO 33 / Canal 1                 | Controle de velocidade               |
+| Encoder Esquerdo   | Canal A/B                 | GPIOs 36 e 39                     | Estrutura definida                   |
+| Encoder Direito    | Canal A/B                 | GPIOs 35 e 34                     | Estrutura definida                   |
 
-A equação matemática aplicada no código é:
+## Configurações do Firmware
 
-$$Output = (Kp \times P) + (Ki \times I) + (Kd \times D)$$
+| Parâmetro                             | Valor    |
+| ------------------------------------- | -------- |
+| Frequência PWM (`FREQ`)               | 50000 Hz |
+| Resolução PWM (`RES`)                 | 8 bits   |
+| Velocidade Base (`BASE_VEL`)          | 120      |
+| Quantidade de Sensores (`SENSOR_QNT`) | 8        |
+| Centro da Linha (`center`)            | 2500     |
+| Ganho Proporcional (`Kp`)             | 0.5      |
+| Ganho Integral (`Ki`)                 | 0.0      |
+| Ganho Derivativo (`Kd`)               | 0.0      |
 
-### 3. Temporização Dinâmica
-O loop de controle monitora o tempo de execução através da função `micros()`. O cálculo de tempo decorrido ($dt$) assegura que os ganhos Integral e Derivativo sejam independentes de variações no tempo de processamento das tarefas da CPU.
-
----
-
-## Leitura de Odometria (Encoders)
-
-O robô está equipado com encoders de quadratura mapeados nos pinos de interrupção da ESP32. 
-* As leituras utilizam sub-rotinas de interrupção rápida (**ISR** - *Interrupt Service Routines*) marcadas com o atributo `IRAM_ATTR` para garantir execução imediata diretamente na memória RAM do chip.
-* Esta infraestrutura foi projetada para calcular a distância percorrida e a velocidade real de cada roda, permitindo futuras implementações de controle de velocidade em malha fechada e mapeamento de curvas.
-
----
-
-## Tratamento dos Sensores (QRE-8D)
-
-A leitura da linha é feita por um array reflexivo compatível com o módulo **QRE-8D** (8 sensores de leitura por descarga de capacitor RC).
-* O método `qtr.readLineWhite(sensorValues)` faz a leitura analógica/digital dos 8 canais em paralelo e calcula a posição estimada do robô sobre uma linha branca usando uma média ponderada.
-* O pino `LEDON` (`19`) atua controlando dinamicamente os emissores infravermelhos, permitindo desligá-los quando o robô estiver ocioso para economizar energia do conjunto de baterias.
+A frequência de 50 kHz foi escolhida para reduzir ruídos audíveis e fornecer uma resposta mais suave aos motores.
 
 ---
 
-## Arquitetura de Software e Classes
+# Tratamento dos Sensores (QRE-8D)
 
-O projeto adota práticas de Programação Orientada a Objetos (POO) para isolar o acoplamento do código físico. A complexidade de baixo nível do hardware fica encapsulada de forma protegida dentro da classe `Motors`.
+O robô utiliza um conjunto de oito sensores reflexivos configurados através da biblioteca `QTRSensors` em modo RC.
 
-###  Abstração dos Motores (`Motors` Class)
+## Funcionamento
 
-A classe utiliza a API moderna do ecossistema ESP32 (`ledcAttachChannel`), vinculando de maneira nativa os pinos do driver à estrutura do periférico de hardware LEDC do chip.
+Cada sensor mede a refletância da superfície por meio do tempo de descarga de um circuito RC.
 
-#### Métodos da Classe (API)
+### Superfície Branca
 
-| Método | Tipo de Retorno | Parâmetros | Descrição |
-| :--- | :---: | :--- | :--- |
-| **`Motors`** | Construtor | `int`, `int`, `int`, `int`, `int`, `int` | Instancia a classe configurando pinos, canais, frequência e resolução. Invoca o método interno `config()`. |
-| **`setRightSpeed`** | `void` | `int velocity` | Atualiza o ciclo de trabalho (Duty Cycle) do motor direito via `ledcWrite`. |
-| **`setLeftSpeed`** | `void` | `int velocity` | Atualiza o ciclo de trabalho (Duty Cycle) do motor esquerdo via `ledcWrite`. |
-| **`setSpeeds`** | `void` | `int velocity_R`, `int velocity_L` | Atualiza a velocidade de ambos os motores ao mesmo tempo. |
+* Maior reflexão da luz infravermelha;
+* Descarga mais rápida;
+* Leitura menor.
 
----
+### Superfície Preta
 
-##  Exemplo de Implementação
+* Menor reflexão da luz infravermelha;
+* Descarga mais lenta;
+* Leitura maior.
 
-Abaixo encontra-se a estrutura básica do loop principal do firmware:
+## Determinação da Posição da Linha
+
+A função:
 
 ```cpp
-#include <Arduino.h>
-#include <motors.h>
-#include <QTRSensors.h>
+qtr.readLineWhite(sensorValues);
+```
 
-// Instanciação dos periféricos
-QTRSensors qtr;
-Motors motors(IN1_R, IN1_L, CHN_R, CHN_L, FREQ, RES);
+retorna a posição estimada da linha utilizando uma média ponderada dos sensores ativos.
 
-uint16_t sensorValues[8];
-int center = 2500;
-int16_t BASE_VEL = 120;
+O valor retornado é comparado ao ponto de referência:
 
-void setup() {
-  motors.setSpeeds(0, 0); // Inicia parado
-  
-  qtr.setTypeRC();
-  qtr.setSensorPins((const uint8_t[]){18, 5, 17, 16, 4, 0, 2, 15}, 8);
-  
-  Serial.begin(115200);
-  delay(500);
-  
-  calibrationRoutine(); // Executa calibração em pista
-}
+```cpp
+center = 2500;
+```
 
-void loop() {
-  // Executa o cálculo do PID e atualiza motores continuamente
-  uint16_t pos = qtr.readLineWhite(sensorValues);
-  int16_t error = center - pos;
-  int16_t correction = pid(error);
-  
-  int16_t vel_R = constrain(BASE_VEL + correction, 0, 255);
-  int16_t vel_L = constrain(BASE_VEL - correction, 0, 255);
-  
-  motors.setSpeeds(vel_R, vel_L);
+gerando o erro utilizado pelo controlador.
+
+## Controle dos Emissores
+
+O pino `LEDON` é utilizado pela biblioteca QTRSensors para controlar os emissores infravermelhos do conjunto de sensores.
+
+---
+
+# Estratégia de Controle da Malha Principal
+
+A navegação do robô é baseada na leitura contínua da posição da linha e no cálculo de correções diferenciais aplicadas aos motores.
+
+## Rotina de Calibração
+
+Durante a inicialização, o robô executa uma rotina de calibração dos sensores:
+
+```cpp
+motors.setSpeeds(100, 0);
+
+for(uint16_t i = 0; i < 100; i++){
+    qtr.calibrate();
 }
 ```
-## Histórico de Versões
+
+Esse procedimento permite que a biblioteca registre os valores mínimos e máximos observados pelos sensores, melhorando a robustez da leitura.
+
+---
+
+## Controle Proporcional (P)
+
+Embora a estrutura do código tenha sido preparada para um controlador PID completo, a versão atual opera apenas com a componente proporcional.
+
+O erro é calculado por:
+
+[
+erro = centro - posição
+]
+
+A correção aplicada aos motores é dada por:
+
+[
+output = K_p \times erro
+]
+
+onde:
+
+[
+K_p = 0.5
+]
+
+As componentes integral e derivativa encontram-se desabilitadas:
+
+[
+K_i = 0
+]
+
+[
+K_d = 0
+]
+
+Portanto, o comportamento atual do sistema corresponde a um controlador proporcional (P).
+
+## Aplicação da Correção
+
+A correção calculada é aplicada diferencialmente:
+
+```cpp
+vel_R = BASE_VEL + correction;
+vel_L = BASE_VEL - correction;
+```
+
+Em seguida, os valores são limitados:
+
+```cpp
+constrain(valor, 0, 255);
+```
+
+garantindo que permaneçam dentro da faixa válida do PWM.
+
+---
+
+## Temporização
+
+O firmware calcula o tempo entre iterações utilizando:
+
+```cpp
+micros();
+```
+
+A variável `dt` é atualizada continuamente e foi incorporada à estrutura do controlador para futuras expansões do PID.
+
+---
+
+# Leitura de Odometria (Encoders)
+
+A infraestrutura para utilização de encoders já foi definida no projeto.
+
+## Pinagem Reservada
+
+| Encoder  | Canal A | Canal B |
+| -------- | ------- | ------- |
+| Esquerdo | GPIO 36 | GPIO 39 |
+| Direito  | GPIO 35 | GPIO 34 |
+
+## Estado Atual
+
+A variável de contagem já está presente:
+
+```cpp
+volatile long encoderCount = 0;
+```
+
+e a rotina de interrupção foi declarada:
+
+```cpp
+void IRAM_ATTR readEncoder(int encoder);
+```
+
+Entretanto, a implementação da leitura dos pulsos e do cálculo de deslocamento ainda não foi concluída nesta versão do firmware.
+
+Portanto, nenhuma funcionalidade de odometria é utilizada atualmente pelo sistema de navegação.
+
+---
+
+# Arquitetura de Software e Classes
+
+O projeto utiliza Programação Orientada a Objetos (POO) para organizar os módulos responsáveis pelo controle do robô.
+
+## Classe Motors
+
+A classe `Motors` encapsula as rotinas de acionamento dos motores e abstrai os detalhes de configuração do PWM da ESP32.
+
+### Responsabilidades
+
+* Inicialização dos canais PWM;
+* Configuração dos pinos de saída;
+* Aplicação das velocidades dos motores;
+* Limitação dos valores enviados ao hardware.
+
+## Métodos Utilizados
+
+### Construtor
+
+```cpp
+Motors(
+  IN1_R,
+  IN1_L,
+  CHN_R,
+  CHN_L,
+  FREQ,
+  RES
+);
+```
+
+Responsável pela configuração inicial do sistema de acionamento.
+
+### Controle de Velocidade
+
+```cpp
+motors.setSpeeds(vel_R, vel_L);
+```
+
+Atualiza simultaneamente a velocidade dos motores direito e esquerdo.
+
+---
+
+# Exemplo de Implementação (Código do Firmware)
+
+Trecho simplificado do loop principal:
+
+```cpp
+uint16_t pos = qtr.readLineWhite(sensorValues);
+
+int16_t error = center - pos;
+
+int16_t correction = pid(error);
+
+int16_t vel_R = BASE_VEL + correction;
+int16_t vel_L = BASE_VEL - correction;
+
+vel_R = constrain(vel_R, 0, 255);
+vel_L = constrain(vel_L, 0, 255);
+
+motors.setSpeeds(vel_R, vel_L);
+```
+
+Implementação atual da função de controle:
+
+```cpp
+int16_t pid(int16_t error){
+    int16_t output = Kp * error;
+    return output;
+}
+```
+
+Como `Ki` e `Kd` estão configurados como zero, o comportamento efetivo do sistema corresponde a um controlador proporcional.
+
+---
+
+# Histórico de Versões
 
 | Versão | Descrição | Autor(es) | Data de Produção | Revisor(es) |
 | :----: | --------- | --------- | :--------------: | :--------------: | 
