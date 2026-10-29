@@ -1,0 +1,42 @@
+/* Paleta baseada na logo da Titans (vermelho + laranja sobre fundo escuro) */
+
+/* Cor primária: cabeçalho e abas em grafite escuro, para a logo se destacar */
+[data-md-color-primary="custom"] {
+  --md-primary-fg-color: #1c1c1f;
+  --md-primary-fg-color--light: #2b2b30;
+  --md-primary-fg-color--dark: #121214;
+  --md-primary-bg-color: #ffffff;
+  --md-primary-bg-color--light: rgba(255, 255, 255, 0.7);
+}
+
+/* Cor de destaque: laranja da logo (hover, foco, botões) */
+[data-md-color-accent="custom"] {
+  --md-accent-fg-color: #e8681c;
+  --md-accent-fg-color--transparent: rgba(232, 104, 28, 0.1);
+}
+
+/* Links: vermelho da logo no tema claro */
+[data-md-color-scheme="default"] {
+  --md-typeset-a-color: #c0300f;
+}
+
+/* Links: laranja mais claro no tema escuro, para manter o contraste */
+[data-md-color-scheme="slate"] {
+  --md-typeset-a-color: #f2924a;
+}
+
+/* Logo maior no cabeçalho */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 2.2rem;
+}
+
+/* Faixa laranja sob o cabeçalho, ligando o tema à logo */
+.md-header {
+  border-bottom: 3px solid #e8681c;
+}
+
+/* Aba ativa em laranja */
+.md-tabs__item--active .md-tabs__link {
+  color: #f2924a;
+}
