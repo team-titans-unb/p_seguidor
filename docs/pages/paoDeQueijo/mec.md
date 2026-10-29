@@ -1,13 +1,13 @@
-# Mecânica — Esquemático Seguidor 1 (Pão de Queijo)
+# Mecânica — Sucrilho
 
-Este documento detalha as especificações técnicas, escolhas de design e métricas da estrutura mecânica do robô seguidor de linha Pão de Queijo.
+Este documento detalha as especificações técnicas, escolhas de design e métricas da estrutura mecânica do robô seguidor de linha Sucrilho.
 
 --- 
 
 ## Sumário
 
 - [Metadados do esquemático mecânico](#metadados-do-esquematico-mecanico)
-- [Visualização do esquemático 3D (CAD)](#visualizacao-do-esquematico-cad)
+- [Visualização do modelo 3D (CAD)](#visualizacao-do-modelo-3d-cad)
 - [Chassi e Estrutura](#chassi-e-estrutura)
 - [Sistema de Locomoção e Rodas](#sistema-de-locomocao-e-rodas)
 - [Materiais](#materiais)
@@ -35,7 +35,7 @@ Os dados abaixo foram extraídos das projeções técnicas geradas a partir da m
     <tbody>
       <tr>
         <td>Título</td>
-        <td>Robô Pão de Queijo</td>
+        <td>Robô Sucrilho</td>
       </tr>
       <tr>
         <td>Componente</td>
@@ -63,17 +63,32 @@ Os dados abaixo foram extraídos das projeções técnicas geradas a partir da m
 
 ---
 
-## Visualização do esquemático CAD
+## Visualização do modelo 3D (CAD)
+
+<div style="position:relative;width:100%;aspect-ratio:4/3;">
+  <iframe src="https://aluno8943.autodesk360.com/shares/public/SH90d2dQT28d5b60281138a74c9b09278aab?mode=embed"
+          style="position:absolute;inset:0;width:100%;height:100%;border:0;"
+          title="Modelo 3D do Sucrilho no Fusion 360"
+          allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
+</div>
+
+<p align="center"><b>Figura 1:</b> Modelo 3D interativo do Sucrilho (Fusion 360)</p>
+<p align="center"><b>Autor do CAD:</b> Gustavo Emmanuel</p>
+
+!!! info ""
+    Os projetos ainda estão sendo atualizados pela equipe e, talvez, possa demorar um pouco para renderizar.
+
+### Vistas exportadas
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/team-titans-unb/p_seguidor/main/docs/pages/paoDeQueijo/dados/Seguidor1cad-superior.JPG" width="600">
-  <p><b>Figura 1:</b> Vista Superior </p>
+  <p><b>Figura 2:</b> Vista Superior </p>
 </div>
 
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/team-titans-unb/p_seguidor/main/docs/pages/paoDeQueijo/dados/Seguidor1cad-lateral.JPG" width="600">
-  <p><b>Figura 2:</b> Vista lateral </p>
+  <p><b>Figura 3:</b> Vista lateral </p>
 </div>
 
 
@@ -152,3 +167,4 @@ A distribuição de peso foi planejada para manter o **Centro de Gravidade (CG)*
 | :----: | --------- | --------- | :--------------: | :--------------: |
 | `1.0` | Modelagem inicial e documentação básica | Felipe das Neves | 02/03/2026 | ✓ |
 | `1.1` | Documentação inicial | Thamires Ellen | 10/05/2026 | ✓ |
+| `1.2` | Nome do robô corrigido para Sucrilho e visualizador interativo do modelo 3D | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 29/10/2026 | — |

@@ -1,4 +1,4 @@
-# Eletrônica — Esquemático Base Seguidor 1 (Pão de Queijo)
+# Eletrônica — Esquemático Base Seguidor 1 (Sucrilho)
 
 ## Sumário
 
@@ -75,7 +75,7 @@ Os dados abaixo foram extraídos da exportação do esquemático (**Seguidor1Bas
 
 <font size="3">
     <p style="text-align: center">
-        <b>Figura 1:</b> Esquemático robô pão de queijo
+        <b>Figura 1:</b> Esquemático do robô Sucrilho
         <br>
     </p>
 </font>

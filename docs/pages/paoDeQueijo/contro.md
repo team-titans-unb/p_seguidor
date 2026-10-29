@@ -1,4 +1,4 @@
-# Documentação - Robô Pão de Queijo
+# Documentação - Robô Sucrilho
 
 Este documento descreve a infraestrutura de software, o mapeamento de hardware e a estratégia de controle implementados na versão atual do robô seguidor de linha baseado na ESP32.
 

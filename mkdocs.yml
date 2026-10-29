@@ -7,21 +7,30 @@ site_description: "Documentação do seguidor de linha"
 nav:
   - Home: index.md
 
-  - Pão de Queijo:
-    - Mecânica: pages/paoDeQueijo/mec.md
-    - Eletrônica: pages/paoDeQueijo/eletr.md
-    - Controle: pages/paoDeQueijo/contro.md
+  - Hammer-S:
+    - Visão geral: pages/stm1Stm2/index.md
+    - Mecânica: pages/stm1Stm2/mec.md
+    - Eletrônica: pages/stm1Stm2/eletr.md
+    - Controle: pages/stm1Stm2/contro.md
 
-  - Sucrilho:
-    - Mecânica: pages/sucrilho/mec.md
-    - Eletrônica: pages/sucrilho/eletr.md
-    - Controle: pages/sucrilho/contro.md
+  - Besourineo:
+    - Visão geral: pages/stm3/index.md
+    - Mecânica: pages/stm3/mec.md
+    - Eletrônica: pages/stm3/eletr.md
+    - Controle: pages/stm3/contro.md
 
   - Azzip:
     - Mecânica: pages/azzip/mec.md
     - Eletrônica: pages/azzip/eletr.md
     - Controle: pages/azzip/contro.md
     - Software: pages/azzip/soft.md
+
+  - Descontinuados:
+    - Sobre: pages/descontinuados/index.md
+    - Sucrilho:
+      - Mecânica: pages/paoDeQueijo/mec.md
+      - Eletrônica: pages/paoDeQueijo/eletr.md
+      - Controle: pages/paoDeQueijo/contro.md
 
 theme:
   name: material
@@ -30,6 +39,8 @@ theme:
   features:
     - content.code.annotate
     - content.tabs.link
+    - navigation.tabs
+    - navigation.indexes
     - header.autohide
     - navigation.instant
     - navigation.top
@@ -38,22 +49,22 @@ theme:
   palette:
 
     - scheme: default
-      primary: '--md-primary-fg-color'
-      accent: '--md-primary-fg-color'
+      primary: custom
+      accent: custom
       toggle:
         icon: material/lightbulb-outline
         name: Mude para o tema escuro
         
     - scheme: slate
-      primary: '--md-primary-fg-color'
-      accent: '--md-primary-fg-color'
+      primary: custom
+      accent: custom
       toggle:
         icon: material/lightbulb
         name: Mude para o tema claro
 
   
-  logo: assets/titansIco.ico
-  favicon: assets/titans.png
+  logo: assets/titans.png
+  favicon: assets/titansIco.ico
   highlightjs: true
 
 extra_css:
@@ -61,5 +72,8 @@ extra_css:
 
 markdown_extensions:
     - admonition
+    - attr_list
+    - md_in_html
+    - tables
     - pymdownx.details
     - pymdownx.superfences
