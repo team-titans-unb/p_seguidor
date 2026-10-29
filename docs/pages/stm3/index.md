@@ -2,6 +2,12 @@
 
 Seguidor de linha com **uma STM32 Blue Pill**, usado como plataforma de testes do firmware. A placa lê o sensor frontal QTR-8RC, controla os motores pelo TB6612FNG com um controlador PD e recebe comandos de um controle remoto infravermelho. Toda a telemetria sai pela serial (FTDI).
 
+<div align="center" markdown>
+![Besourineo montado](dados/foto-besourineo.jpg){ width="600" }
+
+<p><b>Figura 1:</b> Besourineo montado em protoboard sobre o chassi, com a Blue Pill, o driver TB6612FNG, o receptor IR e o controle remoto</p>
+</div>
+
 ---
 
 ## Componentes principais
@@ -29,3 +35,4 @@ Seguidor de linha com **uma STM32 Blue Pill**, usado como plataforma de testes d
 | Versão | Descrição | Autor(es) | Data de Produção | Revisor(es) |
 | :----: | --------- | --------- | :--------------: | :--------------: |
 | `1.0` | Criação da página do robô | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 29/10/2026 | — |
+| `1.1` | Foto do robô montado | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 29/10/2026 | — |
