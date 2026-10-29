@@ -3,9 +3,9 @@
 Seguidor de linha com **duas STM32 Blue Pill**. A **STM1** cuida de tudo que é tempo real: leitura do sensor frontal, controle dos motores, encoders, sensores laterais, micro SD, controle remoto IR, botão e buzzer. A **STM2** fica livre para a interface com o usuário e controla um **display TFT IPS 240×240**. As duas placas conversam por UART.
 
 <div align="center" markdown>
-![Modelo 3D do robô com as placas STM1 e STM2](dados/cad-stm1-stm2.png){ width="600" }
+![Renderização do Hammer-S](dados/render-hammer-s.png){ width="600" }
 
-  <p><b>Figura 1:</b> Modelo 3D do robô, com a posição das duas Blue Pill</p>
+  <p><b>Figura 1:</b> Renderização do modelo 3D do Hammer-S</p>
 </div>
 
 ---
@@ -39,3 +39,4 @@ Seguidor de linha com **duas STM32 Blue Pill**. A **STM1** cuida de tudo que é 
 | Versão | Descrição | Autor(es) | Data de Produção | Revisor(es) |
 | :----: | --------- | --------- | :--------------: | :--------------: |
 | `1.0` | Criação da página do robô | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 29/10/2026 | — |
+| `1.1` | Renderização do modelo 3D na capa, botão e QRE analógicos nos componentes | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 29/10/2026 | — |
