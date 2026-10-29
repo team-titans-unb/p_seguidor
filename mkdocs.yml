@@ -20,6 +20,7 @@ nav:
     - Controle: pages/stm3/contro.md
 
   - Azzip:
+    - Visão geral: pages/azzip/index.md
     - Mecânica: pages/azzip/mec.md
     - Eletrônica: pages/azzip/eletr.md
     - Controle: pages/azzip/contro.md

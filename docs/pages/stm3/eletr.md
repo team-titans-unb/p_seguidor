@@ -1,11 +1,13 @@
 # Eletrônica — Besourineo
 
-Esta página descreve a pinagem da Blue Pill do Besourineo e a configuração do STM32CubeMX usada pelo firmware.
+Esta página descreve o esquemático do Besourineo, a pinagem da Blue Pill e a configuração do STM32CubeMX usada pelo firmware.
 
 ---
 
 ## Sumário
 
+- [Metadados do esquemático](#metadados-do-esquematico)
+- [Visualização do esquemático](#visualizacao-do-esquematico)
 - [Visualização da pinagem](#visualizacao-da-pinagem)
 - [Ligações por módulo](#ligacoes-por-modulo)
 - [Alimentação](#alimentacao)
@@ -15,12 +17,46 @@ Esta página descreve a pinagem da Blue Pill do Besourineo e a configuração do
 
 ---
 
+## Metadados do esquemático
+
+| Campo | Valor |
+| :--- | :--- |
+| Título | simulation line follower das Nieves version |
+| Arquivo | `dasNieves_no_simulation.pdsprj` (Proteus) |
+| Folhas | 1 |
+| Data de exportação | 29/10/2026 |
+| Autor | Felipe das Neves |
+
+!!! tip "Arquivos"
+    O PDF do esquemático está em [`dados/esquematico-besourineo.pdf`](dados/esquematico-besourineo.pdf).
+
+---
+
+## Visualização do esquemático
+
+<div align="center" markdown>
+![Esquemático do Besourineo](dados/esquematico-besourineo.png){ width="900" }
+
+<p><b>Figura 1:</b> Esquemático do Besourineo: receptor IR, step-down, sensores laterais, driver dos motores, sensor frontal e Blue Pill</p>
+</div>
+
+### Conectores
+
+| Conector | Módulo | Pinos |
+| :--- | :--- | :--- |
+| J1 (`QTR8D`) | Sensor frontal | 1 GND, 2 3,3 V, 3 LEDON, 4 a 11 = S1 a S8 |
+| J2 (`QRE-analog-esq`) | QRE esquerdo | 1 3,3 V, 2 sinal, 3 GND |
+| J3 (`QRE-analog-dir`) | QRE direito | 1 3,3 V, 2 sinal, 3 GND |
+| J4 (`IR`) | Receptor IR | 1 3,3 V, 2 sinal (PA8), 3 GND |
+
+---
+
 ## Visualização da pinagem
 
 <div align="center" markdown>
 ![Pinagem da STM3](dados/pinagem-stm3.svg){ width="900" }
 
-<p><b>Figura 1:</b> Pinagem da Blue Pill do Besourineo. Os números pequenos são os pinos do chip (LQFP48).</p>
+<p><b>Figura 2:</b> Pinagem da Blue Pill do Besourineo. Os números pequenos são os pinos do chip (LQFP48).</p>
 </div>
 
 ---
@@ -107,6 +143,10 @@ O firmware depende dos **User Labels** abaixo, escritos exatamente assim (em min
 1. **Motor esquerdo no canal A:** o firmware considera o motor A como o esquerdo. Se os motores estiverem trocados no TB6612, as curvas saem invertidas.
 2. **USB da placa:** PA11 e PA12 ficam livres e não devem ser usados enquanto o USB da Blue Pill estiver em uso.
 3. **Receptor IR:** mantenha um capacitor de 100 nF entre VCC e GND perto do receptor, por causa do ruído dos motores.
+4. **QRE sem ligação no esquemático:** os conectores J2 e J3 têm os rótulos `qre-esq` e `qre-dir`, mas esses rótulos não aparecem na Blue Pill. O firmware lê os QRE no **PB4** e no **PB5**; falta colocar os rótulos nesses pinos.
+5. **Micro SD fora do esquemático:** o firmware usa o micro SD no SPI2 (PB12 a PB15), mas o módulo não está desenhado. Os pinos PB12 a PB15 aparecem sem ligação.
+6. **FTDI sem conector:** o PA9 e o PA10 têm os rótulos `FTDI RX` e `RTDI TX`, mas não há conector para o FTDI no desenho. O rótulo `RTDI TX` também tem um erro de digitação (deveria ser `FTDI TX`).
+7. **Rótulo do QRE direito:** o J3 está escrito `QRE-anolog-dir`. É só o nome do componente, sem efeito nas ligações.
 
 ---
 
@@ -115,3 +155,4 @@ O firmware depende dos **User Labels** abaixo, escritos exatamente assim (em min
 | Versão | Descrição | Autor(es) | Data de Produção | Revisor(es) |
 | :----: | --------- | --------- | :--------------: | :--------------: |
 | `1.0` | Pinagem e configuração do CubeMX | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 29/10/2026 | — |
+| `1.1` | Esquemático do Proteus e tabela de conectores | [Felipe das Neves](https://github.com/FelipeFreire-gf) | 29/10/2026 | — |
